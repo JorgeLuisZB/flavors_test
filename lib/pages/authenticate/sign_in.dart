@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flavors_test/services/auth.dart';
+import 'package:flavors_test/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -10,6 +12,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _authService = AuthService();
+  String uid = '';
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +21,33 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign in to Brew Crew'),
+        title: Text('Flavor Test'),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: ElevatedButton(
-          child: Text('Sign in anon'),
-          onPressed: () async {
-            dynamic result = await _authService.signInAnon();
-            if (result == null) {
-              print('error signing in');
-            } else {
-              print('signed in');
-              print(result);
-            }
-          },
+        child: Column(
+          children: [
+            ElevatedButton(
+              child: Text('Sign in'),
+              onPressed: () async {
+                User? result = await _authService.signInAnon();
+                if (result == null) {
+                  print('error signing in');
+                } else {
+                  print('signed in');
+                  uid = result.uid;
+                  print(result.uid);
+                }
+              },
+            ),
+            ElevatedButton(
+              child: Text('Add item'),
+              onPressed: () async {
+                await Database.addItem(
+                    uid: uid, title: 'new item', description: 'item ');
+              },
+            ),
+          ],
         ),
       ),
     );
