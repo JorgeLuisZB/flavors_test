@@ -43,6 +43,17 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+
+        // TODO: Set the values with Btirise environment variables
+        release {
+            keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+            keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+            storeFile file(System.getenv("HOME") + "/keystores/prod.jks")
+            storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
